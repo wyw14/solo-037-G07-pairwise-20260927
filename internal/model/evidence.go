@@ -10,6 +10,8 @@ const (
     EvidenceForce EvidenceKind = "force"
     EvidencePosition EvidenceKind = "position"
     EvidenceBrake EvidenceKind = "brake"
+    EvidenceRoll EvidenceKind = "roll"
+    EvidencePitch EvidenceKind = "pitch"
 )
 
 type Evidence struct {

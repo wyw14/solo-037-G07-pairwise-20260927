@@ -124,8 +124,10 @@ func (a *MeasurementArchive) Create(name, modelName, section, carriage string) (
 }
 
 func (a *MeasurementArchive) Record(id model.RunID, input MeasurementInput) (model.Evidence, error) {
-	if input.Kind != model.EvidenceWaveTime && input.Kind != model.EvidenceForce {
-		return model.Evidence{}, errors.New("measurement kind must be wave_time or force")
+	switch input.Kind {
+	case model.EvidenceWaveTime, model.EvidenceForce, model.EvidenceRoll, model.EvidencePitch, model.EvidencePosition:
+	default:
+		return model.Evidence{}, errors.New("measurement kind must be wave_time, force, roll, pitch or position")
 	}
 	if strings.TrimSpace(input.SourceID) == "" || math.IsNaN(input.Value) || math.IsInf(input.Value, 0) || input.RecordedAt.IsZero() || input.RecordedAt.After(time.Now().Add(time.Minute)) {
 		return model.Evidence{}, errors.New("source, finite value and valid observation time are required")

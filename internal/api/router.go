@@ -15,6 +15,7 @@ type Dependencies interface {
 	Interlocks() any
 	Incidents() any
 	MeasurementService
+	AttitudeService
 }
 
 type Router struct{ dependencies Dependencies }
@@ -33,6 +34,9 @@ func (r *Router) Handler() http.Handler {
 	router.Get("/api/measured-runs/{id}", r.measuredRun)
 	router.Post("/api/measured-runs/{id}/evidence", r.recordMeasurement)
 	router.Get("/api/measured-runs/{id}/analysis", r.measurementAnalysis)
+	router.Post("/api/measured-runs/{id}/attitude-sensors", r.registerAttitudeSensor)
+	router.Get("/api/measured-runs/{id}/attitude-sensors", r.attitudeSensors)
+	router.Get("/api/measured-runs/{id}/attitude-analysis", r.attitudeAnalysis)
 	tests := TestHandler{Service: r.dependencies}
 	router.Post("/api/operations", tests.Create)
 	router.Post("/api/abort", tests.Abort)
